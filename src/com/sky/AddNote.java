@@ -37,7 +37,12 @@ public class AddNote extends AnAction {
         String projectName = e.getProject().getName();
         DataCenter.FILE = file;
         VirtualFile virtualFile = file.getViewProvider().getVirtualFile();
-        DataCenter.CURRENT_FILE_NAME = virtualFile.getPath().substring(virtualFile.getPath().indexOf(projectName));
+        if (virtualFile.getPath().indexOf(projectName) == -1) {
+            int length = e.getProject().getBasePath().lastIndexOf("/") + 1;
+            DataCenter.CURRENT_FILE_NAME = virtualFile.getPath().substring(length);
+        } else {
+            DataCenter.CURRENT_FILE_NAME = virtualFile.getPath().substring(virtualFile.getPath().indexOf(projectName));
+        }
         if (StringUtils.equals(virtualFile.getFileType().getName(), "JAVA")) {
             DataCenter.METHOD_PARAM = getParams(file, selectedText, selectionModel.getSelectionStart());
         } else {
